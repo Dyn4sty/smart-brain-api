@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt-nodejs')
 const knex = require('knex')({
     client: 'pg',
     connection: {
-      host : '127.0.0.1',
       connectString: process.env.DATABASE_URL,
       ssl: true
 
