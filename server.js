@@ -5,9 +5,9 @@ const knex = require('knex')({
     client: 'pg',
     connection: {
       host : '127.0.0.1',
-      user : 'postgres',
-      password : 'test',
-      database : 'smart-brain'
+      connectString: process.env.DATABASE_URL,
+      ssl: true
+
     }
   });
 
@@ -34,7 +34,11 @@ app.post('/signin', (req,res) => {
         if (data[0].email) {
             const {email, hash} = data[0]
             if (email === loginEmail && bcrypt.compareSync(password, hash) ) {
-                res.status(200).json('success')
+                return knex.select('*').from('users').where('email', '=', email)
+                .then(user => {
+                    res.status(200).json(user[0])
+                })
+                .catch(err => res.status(400).json('unable to get user'))
             } else {
                 res.status(500).json('failed')
             }
@@ -84,20 +88,6 @@ app.post('/register', (req,res) => {
 })
 
 
-app.get('/profile/:id', (req,res) => {
-    let found = false
-    if (req.params) {
-        const {id} = req.params
-        database.users.map(item => {
-            if (id === item.id) {
-                return res.json(item)
-            }
-        })
-    }
-    if (!found) {
-        res.sendStatus(404)
-    }
-}) 
 app.put('/image', (req,res) => {
     const {id} = req.body
     knex('users').where('id', '=', id)
@@ -106,5 +96,15 @@ app.put('/image', (req,res) => {
     .then(entries => res.json(entries[0]))
 })
 
+app.put('/entries', (req,res) => {
+    if (req.body.id) {
+        const {id} = req.body
+        knex.select('entries').from('users')
+        .where('id', '=', id)
+        .then(entries => res.json(entries[0].entries))
+        .catch(err => res.status(400).json('couldnt find id'))
+    }
 
-app.listen(3000)
+
+})
+app.listen(process.env.PORT || 3000)
