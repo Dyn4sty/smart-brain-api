@@ -1,4 +1,4 @@
-handleEntries = (req,res) => {
+const handleEntries = (req,res) => {
     if (req.body.id) {
         const {id} = req.body
         knex.select('entries').from('users')
@@ -8,4 +8,7 @@ handleEntries = (req,res) => {
     }
   
   
+}
+module.exports = {
+    handleEntries: handleEntries
 }
