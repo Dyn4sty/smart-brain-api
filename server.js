@@ -26,6 +26,8 @@ app.post('/register', (req, res) => { register.handleRegister(req, res, knex, bc
 app.get('/profile/:id', (req, res) => { profile.handleProfileGet(req, res, knex)})
 app.put('/image', (req, res) => { image.handleImage(req, res, knex)})
 app.post('/imageurl', (req, res) => { image.handleApiCall(req, res)})
-app.put('/entries', (req, res) => {entries.handleEntries(req, res)})
+app.put('/entries', (req, res) => {entries.handleEntries(req, res, knex)})
 
-app.listen( process.env.PORT ||3000)
+app.listen( process.env.PORT ||3000, ()=> {
+  console.log('app is running on port 3000');
+})
