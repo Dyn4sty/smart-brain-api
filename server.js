@@ -40,7 +40,7 @@ app.post('/signin', (req,res) => {
             }
         }
 
-    }).catch(console.log)
+    }).catch(err => res.status(400).json('unable to sign in'))
     
 })
 
