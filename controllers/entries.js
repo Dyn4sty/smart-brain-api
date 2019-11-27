@@ -1,4 +1,4 @@
-const handleEntries = (req,res) => {
+const handleEntries = (req,res, knex) => {
     if (req.body.id) {
         const {id} = req.body
         knex.select('entries').from('users')
